@@ -1,18 +1,21 @@
 name: ${pluginName}
 version: ${version}
 main: com.willfp.ecoarmor.EcoArmorPlugin
-api-version: 1.17
-authors: [ Auxilor ]
-website: willfp.com
-depend:
-  - eco
-softdepend:
-  - libreforge
+api-version: 1.19
 
-commands:
-  ecoarmor:
-    description: Base Command
-    permission: ecoarmor.command.ecoarmor
+dependencies:
+  - name: eco
+    required: true
+    bootstrap: false
+
+  - name: libreforge
+    required: false
+    bootstrap: false
+
+load-after:
+  - name: eco
+    bootstrap: false
+
 
 permissions:
   ecoarmor.*:

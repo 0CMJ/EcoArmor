@@ -6,19 +6,23 @@ import com.willfp.eco.core.display.Display
 import com.willfp.eco.core.items.CustomItem
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.core.recipe.recipes.ShapedCraftingRecipe
+import com.willfp.eco.core.registry.Registrable
 import com.willfp.eco.util.StringUtils
 import com.willfp.ecoarmor.sets.ArmorSlot
 import com.willfp.ecoarmor.sets.ArmorUtils.getCrystalTier
-import com.willfp.ecoarmor.util.notNullMapOf
+import com.willfp.libreforge.notNullMapOf
+import com.willfp.libreforge.notNullMutableMapOf
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 import java.util.*
 
+
+@Suppress("DEPRECATION")
 class Tier(
     val id: String,
     private val config: Config,
     plugin: EcoPlugin
-) {
+) : Registrable {
     /**
      * The display name of the crystal.
      */
@@ -47,14 +51,12 @@ class Tier(
     /**
      * Item properties.
      */
-    val properties = notNullMapOf<ArmorSlot, TierProperties>()
+    val properties = notNullMutableMapOf<ArmorSlot, TierProperties>()
 
     /**
      * Create a new Tier.
      */
     init {
-        Tiers.addNewTier(this)
-
         craftable = this.config.getBool("crystal.craftable")
         displayName = this.config.getFormattedString("display")
         requiredTiersForApplication = this.config.getStrings("requiresTiers")
@@ -127,6 +129,10 @@ class Tier(
      */
     fun getRequiredTiersForApplication(): List<Tier> {
         return requiredTiersForApplication.mapNotNull { Tiers.getByID(it) }
+    }
+
+    override fun getID(): String {
+        return this.id
     }
 
     override fun equals(other: Any?): Boolean {
